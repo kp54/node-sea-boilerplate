@@ -28,7 +28,54 @@ Your app will be stored in `build/app`.
 npm run build
 ```
 
-### Notes
+## What changed from the default
+
+### Enabled correctness/useImportExtensions
+
+To ensure we have `.ts` for every import.
+
+```diff
+diff --git a/biome.json b/biome.json
+index 8d47a1e..9e70f08 100644
+--- a/biome.json
++++ b/biome.json
+@@ -15,7 +15,10 @@
+        "linter": {
+                "enabled": true,
+                "rules": {
+-                       "recommended": true
++                       "recommended": true,
++                       "correctness": {
++                               "useImportExtensions": "error"
++                       }
+                }
+        },
+        "javascript": {
+```
+
+### Enabled noEmit
+
+Since we only use TypeScript to perform type checking.
+Type stripping, bundling, and minification are all done by esbuild.
+
+```diff
+diff --git a/tsconfig.json b/tsconfig.json
+index 32f805d..6042987 100644
+--- a/tsconfig.json
++++ b/tsconfig.json
+@@ -3,6 +3,9 @@
+     "@tsconfig/node24/tsconfig.json",
+     "@tsconfig/node-ts/tsconfig.json",
+   ],
++  "compilerOptions": {
++    "noEmit": true,
++  },
+   "include": [
+     "src/",
+   ],
+```
+
+## Notes
 
 - Currently, this project only supports the Linux x64 platform.
   But Node SEA also seems to work on other platforms like Windows x64 or macOS arm64.
